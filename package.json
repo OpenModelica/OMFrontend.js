@@ -1,0 +1,47 @@
+{
+    "name": "omfrontend",
+    "version": "0.0.0",
+    "description": "Modelica frontend in JavaScript",
+    "type": "module",
+    "main": "dist/node/index.js",
+    "browser": "dist/browser/index.js",
+    "types": "dist/types/index.d.ts",
+    "files": [
+        "dist"
+    ],
+    "bin": {
+        "omf": "./dist/node/main.js"
+    },
+    "scripts": {
+        "build-cli": "tsc && chmod +x dist/node/main.js",
+        "build": "tsc && chmod +x dist/node/main.js && cd node_modules/tree-sitter-modelica && npx tree-sitter build-wasm . --docker && cd ../.. && webpack",
+        "serve": "tsc -w & webpack serve & wait"
+    },
+    "devDependencies": {
+        "@types/d3": "^7.1.0",
+        "@types/jsdom": "^16.2.14",
+        "@types/node": "^17.0.10",
+        "@types/yargs": "^17.0.8",
+        "copy-webpack-plugin": "^10.2.1",
+        "file-loader": "^6.2.0",
+        "resolve-typescript-plugin": "^1.1.5",
+        "tree-sitter-cli": "^0.20.4",
+        "ts-loader": "^9.2.6",
+        "typescript": "^4.5.5",
+        "webpack": "^5.67.0",
+        "webpack-cli": "^4.9.2",
+        "webpack-dev-server": "^4.7.3"
+    },
+    "dependencies": {
+        "browser-process-hrtime": "^1.0.0",
+        "jszip": "^3.7.1",
+        "monaco-editor": "^0.32.1",
+        "monaco-editor-core": "^0.32.1",
+        "process": "^0.11.10",
+        "tree-sitter": "^0.20.0",
+        "tree-sitter-modelica": "file:../tree-sitter-modelica",
+        "vscode-languageserver-textdocument": "^1.0.4",
+        "web-tree-sitter": "^0.20.5",
+        "yargs": "^17.3.1"
+    }
+}
