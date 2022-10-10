@@ -56,8 +56,8 @@ export class ModelicaBrowserContext extends ModelicaContext {
             return;
         }
 
-        await Parser.init();
-        parser = new Parser();
+        await Parser.default.init();
+        parser = new Parser.default();
         parser.setLanguage(await Parser.Language.load("tree-sitter-modelica.wasm"));
 
         ModelicaBrowserContext.#parser = parser;

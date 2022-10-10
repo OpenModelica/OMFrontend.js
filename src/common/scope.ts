@@ -20,9 +20,9 @@
  * @author Mohamad Omar Nachawati <omar@perpetuallabs.io>
  */
 
- import { ModelicaContext } from "./context";
- import { ModelicaClassSymbol, ModelicaNamedElementSymbol } from "./symbols";
- import { ModelicaComponentReferenceExpressionSyntax, ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaTypeSpecifierSyntax } from "./syntax";
+ import { ModelicaContext } from "./context.js";
+ import { ModelicaClassSymbol, ModelicaNamedElementSymbol } from "./symbols.js";
+ import { ModelicaComponentReferenceExpressionSyntax, ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaTypeSpecifierSyntax } from "./syntax.js";
  
  export interface ModelicaScope {
  

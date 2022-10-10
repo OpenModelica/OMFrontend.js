@@ -22,11 +22,11 @@
 
  import { Position, Range, TextDocument, TextDocumentContentChangeEvent, TextEdit } from "vscode-languageserver-textdocument";
 
- import { ModelicaContext } from "./context";
- import { Point, SyntaxNode, Tree } from "./parser";
- import { ModelicaScope } from "./scope";
- import { ModelicaClassSymbol, ModelicaNamedElementSymbol } from "./symbols";
- import { ModelicaComponentReferenceExpressionSyntax, ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaStoredDefinitionSyntax, ModelicaTypeSpecifierSyntax } from "./syntax";
+ import { ModelicaContext } from "./context.js";
+ import { Point, SyntaxNode, Tree } from "./parser.js";
+ import { ModelicaScope } from "./scope.js";
+ import { ModelicaClassSymbol, ModelicaNamedElementSymbol } from "./symbols.js";
+ import { ModelicaComponentReferenceExpressionSyntax, ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaStoredDefinitionSyntax, ModelicaTypeSpecifierSyntax } from "./syntax.js";
  
  export class ModelicaDocument implements ModelicaScope, TextDocument {
  

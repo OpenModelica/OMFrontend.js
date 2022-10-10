@@ -20,7 +20,7 @@
  * @author Mohamad Omar Nachawati <omar@perpetuallabs.io>
  */
 
-import { BufferedPrintWriter, PrintWriter } from './writer';
+import { BufferedPrintWriter, PrintWriter } from './writer.js';
 
 export abstract class XmlNode {
 

@@ -20,10 +20,10 @@
  * @author Mohamad Omar Nachawati <omar@perpetuallabs.io>
  */
 
-import { ModelicaLibrary } from "./library";
-import { childForFieldName, childrenForFieldName, SyntaxNode } from "./parser";
-import { ModelicaScope } from "./scope";
-import { ModelicaElementSymbol, ModelicaClassSymbol, ModelicaExtendsSymbol, ModelicaImportSymbol, ModelicaComponentSymbol, ModelicaAnnotationClassSymbol, ModelicaEquationSectionSymbol, ModelicaAlgorithmSectionSymbol, ModelicaObjectSymbol, ModelicaIntegerObjectSymbol, ModelicaRealObjectSymbol, ModelicaStringObjectSymbol, ModelicaBooleanObjectSymbol, ModelicaNumberObjectSymbol, ModelicaArrayObjectSymbol, ModelicaArrayClassSymbol, ModelicaBooleanClassSymbol, ModelicaStringClassSymbol, ModelicaIntegerClassSymbol, ModelicaRealClassSymbol, ModelicaEnumerationLiteralComponentSymbol, ModelicaNamedElementSymbol } from "./symbols";
+import { ModelicaLibrary } from "./library.js";
+import { childForFieldName, childrenForFieldName, SyntaxNode } from "./parser.js";
+import { ModelicaScope } from "./scope.js";
+import { ModelicaElementSymbol, ModelicaClassSymbol, ModelicaExtendsSymbol, ModelicaImportSymbol, ModelicaComponentSymbol, ModelicaAnnotationClassSymbol, ModelicaEquationSectionSymbol, ModelicaAlgorithmSectionSymbol, ModelicaObjectSymbol, ModelicaIntegerObjectSymbol, ModelicaRealObjectSymbol, ModelicaStringObjectSymbol, ModelicaBooleanObjectSymbol, ModelicaNumberObjectSymbol, ModelicaArrayObjectSymbol, ModelicaArrayClassSymbol, ModelicaBooleanClassSymbol, ModelicaStringClassSymbol, ModelicaIntegerClassSymbol, ModelicaRealClassSymbol, ModelicaEnumerationLiteralComponentSymbol, ModelicaNamedElementSymbol } from "./symbols.js";
 
 // DONE
 export abstract class ModelicaSyntaxNode {

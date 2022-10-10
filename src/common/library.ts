@@ -22,11 +22,11 @@
 
  import * as JSZip from "jszip";
 
- import { ModelicaContext } from "./context";
- import { ModelicaScope } from "./scope";
- import { ModelicaClassSymbol, ModelicaNamedElementSymbol } from "./symbols";
- import { ModelicaComponentReferenceExpressionSyntax, ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaStoredDefinitionSyntax, ModelicaTypeSpecifierSyntax } from "./syntax";
- import { getIdentifiers } from "./util";
+ import { ModelicaContext } from "./context.js";
+ import { ModelicaScope } from "./scope.js";
+ import { ModelicaClassSymbol, ModelicaNamedElementSymbol } from "./symbols.js";
+ import { ModelicaComponentReferenceExpressionSyntax, ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaStoredDefinitionSyntax, ModelicaTypeSpecifierSyntax } from "./syntax.js";
+ import { getIdentifiers } from "./util.js";
  
  export abstract class ModelicaLibrary implements ModelicaScope {
  

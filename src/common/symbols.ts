@@ -20,12 +20,12 @@
  * @author Mohamad Omar Nachawati <omar@perpetuallabs.io>
  */
 
-import { ModelicaScope } from "./scope";
-import { ModelicaAlgorithmSectionSyntax, ModelicaClassDefinitionSyntax, ModelicaClassRedeclarationSyntax, ModelicaClassRestriction, ModelicaComponentDeclarationSyntax, ModelicaComponentReferenceExpressionSyntax, ModelicaConnectClauseSyntax, ModelicaDescriptionStringSyntax, ModelicaElementModificationSyntax, ModelicaElementSyntax, ModelicaEnumerationLiteralSyntax, ModelicaEquationSectionSyntax, ModelicaExpressionSyntax, ModelicaExtendsClauseSyntax, ModelicaIdentifierSyntax, ModelicaImportClauseSyntax, ModelicaModificationEnvironment, ModelicaNamedArgumentSyntax, ModelicaNamedElementSyntax, ModelicaNameSyntax, ModelicaTypeSpecifierSyntax, ModelicaVisibility } from "./syntax";
-import { BufferedPrintWriter, PrintWriter } from "./writer";
-import { getIdentifiers, toArray } from "./util";
-import { ModelicaContext } from "./context";
-import { renderDiagram, renderIcon, renderSimpleIcon } from "./graphics";
+import { ModelicaScope } from "./scope.js";
+import { ModelicaAlgorithmSectionSyntax, ModelicaClassDefinitionSyntax, ModelicaClassRedeclarationSyntax, ModelicaClassRestriction, ModelicaComponentDeclarationSyntax, ModelicaComponentReferenceExpressionSyntax, ModelicaConnectClauseSyntax, ModelicaDescriptionStringSyntax, ModelicaElementModificationSyntax, ModelicaElementSyntax, ModelicaEnumerationLiteralSyntax, ModelicaEquationSectionSyntax, ModelicaExpressionSyntax, ModelicaExtendsClauseSyntax, ModelicaIdentifierSyntax, ModelicaImportClauseSyntax, ModelicaModificationEnvironment, ModelicaNamedArgumentSyntax, ModelicaNamedElementSyntax, ModelicaNameSyntax, ModelicaTypeSpecifierSyntax, ModelicaVisibility } from "./syntax.js";
+import { BufferedPrintWriter, PrintWriter } from "./writer.js";
+import { getIdentifiers, toArray } from "./util.js";
+import { ModelicaContext } from "./context.js";
+import { renderDiagram, renderIcon, renderSimpleIcon } from "./graphics.js";
 import { XmlElement } from "./dom.js";
 
 

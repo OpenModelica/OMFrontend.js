@@ -20,7 +20,7 @@
  * @author Mohamad Omar Nachawati <omar@perpetuallabs.io>
  */
 
-import { ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaTypeSpecifierSyntax } from "./syntax";
+import { ModelicaIdentifierSyntax, ModelicaNameSyntax, ModelicaTypeSpecifierSyntax } from "./syntax.js";
 
 export function getIdentifiers(reference: ModelicaIdentifierSyntax | ModelicaNameSyntax | ModelicaTypeSpecifierSyntax | string | string[] | null | undefined): string[] {
 
