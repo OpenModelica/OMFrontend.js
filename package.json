@@ -14,7 +14,8 @@
     },
     "scripts": {
         "build-cli": "tsc && chmod +x dist/node/main.js",
-        "build": "tsc && chmod +x dist/node/main.js && cd node_modules/tree-sitter-modelica && npx tree-sitter build-wasm . --docker && cd ../.. && webpack",
+        "build": "tsc && chmod +x dist/node/main.js && webpack",
+        "build-all": "tsc && chmod +x dist/node/main.js && cd node_modules/tree-sitter-modelica && npx tree-sitter build-wasm . --docker && cd ../.. && cd node_modules/tree-sitter-modelicascript && npx tree-sitter build-wasm . --docker && cd ../.. && webpack",
         "serve": "tsc -w & webpack serve & wait"
     },
     "devDependencies": {
@@ -40,6 +41,7 @@
         "process": "^0.11.10",
         "tree-sitter": "^0.20.0",
         "tree-sitter-modelica": "file:../tree-sitter-modelica",
+        "tree-sitter-modelicascript": "file:../tree-sitter-modelicascript",
         "vscode-languageserver-textdocument": "^1.0.4",
         "web-tree-sitter": "^0.20.5",
         "yargs": "^17.3.1"

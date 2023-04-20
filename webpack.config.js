@@ -77,6 +77,7 @@ export default (env, argv) => {
                 patterns: [
                     { from: "./node_modules/web-tree-sitter/tree-sitter.wasm", to: "./" },
                     { from: "./node_modules/tree-sitter-modelica/tree-sitter-modelica.wasm", to: "./" },
+                    { from: "./node_modules/tree-sitter-modelicascript/tree-sitter-modelicascript.wasm", to: "./" },
                 ],
             })
         ],

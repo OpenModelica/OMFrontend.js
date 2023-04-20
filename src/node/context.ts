@@ -24,6 +24,8 @@ import Parser from "tree-sitter";
 
 // @ts-ignore
 import Modelica from "tree-sitter-modelica";
+// @ts-ignore
+import ModelicaScript from "tree-sitter-modelicascript";
 
 import { ModelicaContext } from "../common/context.js";
 import { ModelicaLibrary } from "../common/library.js";
@@ -65,6 +67,44 @@ export class ModelicaNodeContext extends ModelicaContext {
 
     override parse(input: string | InputReader, previousTree?: Tree): Tree {
         return ModelicaNodeContext.#parser.parse(input, previousTree as Parser.Tree | undefined);
+    }
+
+}
+
+export class ModelicaScriptContext extends ModelicaContext {
+
+    static #parser: Parser;
+
+    constructor(workspace?: ModelicaLibrary, libraries?: ModelicaLibrary[]) {
+
+        super(workspace, libraries);
+
+        ModelicaScriptContext.initialize();
+
+        if (ModelicaScriptContext.#parser == null)
+            throw new Error("ModelicaScriptContext is not initialized.");
+
+    }
+
+    addLibrary(rootPath: string): ModelicaLibrary {
+        let library = new ModelicaNodeFileSystemLibrary(this, rootPath);
+        this.libraries.push(library);
+        return library;
+    }
+
+    static initialize(): void {
+
+        if (ModelicaScriptContext.#parser != null)
+            return;
+
+        let parser = new Parser();
+        parser.setLanguage(ModelicaScript);
+        ModelicaScriptContext.#parser = parser;
+
+    }
+
+    override parse(input: string | InputReader, previousTree?: Tree): Tree {
+        return ModelicaScriptContext.#parser.parse(input, previousTree as Parser.Tree | undefined);
     }
 
 }
