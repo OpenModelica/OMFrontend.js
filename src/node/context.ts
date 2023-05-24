@@ -24,8 +24,6 @@ import Parser from "tree-sitter";
 
 // @ts-ignore
 import Modelica from "tree-sitter-modelica";
-// @ts-ignore
-import ModelicaScript from "tree-sitter-modelicascript";
 
 import { ModelicaContext } from "../common/context.js";
 import { ModelicaLibrary } from "../common/library.js";
@@ -98,7 +96,7 @@ export class ModelicaScriptContext extends ModelicaContext {
             return;
 
         let parser = new Parser();
-        parser.setLanguage(ModelicaScript);
+        parser.setLanguage(Modelica/*Script*/);
         ModelicaScriptContext.#parser = parser;
 
     }

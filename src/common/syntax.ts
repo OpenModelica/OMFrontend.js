@@ -8080,8 +8080,14 @@ export class ModelicaInteractiveStatementsSyntax extends ModelicaElementSyntax {
     #initial?: SyntaxNode;
     #statements?: ModelicaInteractiveStatementSyntax[];
 
-    execute(scope: ModelicaScope): any {
-       return 0;
+    async execute(parent: ModelicaScope): Promise<ModelicaAlgorithmSectionSymbol> {
+       console.log("-> running statements!");
+       if (this.#statements != undefined) {
+        for (var s of this.#statements) {
+            console.log(s);
+        }
+       }
+       return new ModelicaAlgorithmSectionSymbol(parent, this);
     }
 
     constructor(source?: SyntaxNode | null) {
