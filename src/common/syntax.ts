@@ -8015,6 +8015,10 @@ export abstract class ModelicaSyntaxVisitor {
         throw new Error("Method not implemented.");
     }
 
+    visitInteractiveExpressionStatement(node: ModelicaInteractiveStatementSyntax, ...args: any[]): any {
+            throw new Error("Method not implemented.");
+    }
+
 }
 
 // DONE
@@ -8069,4 +8073,613 @@ export enum ModelicaUnaryOperator {
 export enum ModelicaVisibility {
     PROTECTED = "protected",
     PUBLIC = "public"
+}
+
+export class ModelicaInteractiveStatementsSyntax extends ModelicaElementSyntax {
+
+    #initial?: SyntaxNode;
+    #statements?: ModelicaInteractiveStatementSyntax[];
+
+    async execute(parent: ModelicaScope): Promise<ModelicaAlgorithmSectionSymbol> {
+       console.log("-> running statements!");
+       if (this.#statements != undefined) {
+        for (var s of this.#statements) {
+            console.log(s);
+        }
+       }
+       return new ModelicaAlgorithmSectionSymbol(parent, this);
+    }
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    override accept(visitor: ModelicaSyntaxVisitor, ...args: any[]): any {
+        return visitor.visitAlgorithmSection(this, ...args);
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.statements != null)
+                yield* node.statements;
+
+        }();
+
+    }
+
+    get initial(): SyntaxNode | undefined {
+        this.parse();
+        return this.#initial;
+    }
+
+    override async instantiate(parent: ModelicaScope): Promise<ModelicaAlgorithmSectionSymbol> {
+        return new ModelicaAlgorithmSectionSymbol(parent, this);
+    }
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveStatementsSyntax | undefined {
+
+        if (source == null || source.type != "interactive_stmt")
+            return undefined;
+
+        return new ModelicaInteractiveStatementsSyntax(source);
+
+    }
+
+    override parse(): void {
+
+        if (this.parsed == true)
+            return;
+
+        if (this.source == null || this.source.type != "interactive_stmt")
+            throw new Error(`Expected interactive_stmt, got ${this.source?.type}`);
+
+        this.#statements = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "statements"), "statement")) {
+
+            let statement = ModelicaStatementSyntax.new(child);
+
+            if (statement != null)
+                this.#statements.push(statement);
+
+        }
+
+        this.#initial = childForFieldName(this.source, "initial");
+
+        this.parsed = true;
+
+    }
+
+    get statements(): ModelicaInteractiveStatementSyntax[] | undefined {
+        this.parse();
+        return this.#statements;
+    }
+
+}
+
+// DONE
+export abstract class ModelicaInteractiveStatementSyntax extends ModelicaSyntaxNode {
+
+    #annotationClause?: ModelicaAnnotationClauseSyntax;
+    #descriptionString?: ModelicaDescriptionStringSyntax;
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    get annotationClause(): ModelicaAnnotationClauseSyntax | undefined {
+        this.parse();
+        return this.#annotationClause;
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.annotationClause != null)
+                yield node.annotationClause;
+
+            if (node.descriptionString != null)
+                yield node.descriptionString;
+
+        }();
+
+    }
+
+    get descriptionString(): ModelicaDescriptionStringSyntax | undefined {
+        this.parse();
+        return this.#descriptionString;
+    }
+
+    abstract execute(scope: ModelicaScope): Promise<void>;
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveStatementSyntax | undefined {
+
+        switch (source?.type) {
+
+            case "top_assignment_statement":
+                return ModelicaInteractiveAssignmentStatementSyntax.new(source);
+
+            case "expression":
+                return ModelicaInteractiveExpressionStatementSyntax.new(source);
+
+            case "if_statement":
+                return ModelicaInteractiveIfStatementSyntax.new(source);
+
+            case "for_statement":
+                return ModelicaInteractiveForStatementSyntax.new(source);
+
+            case "while_statement":
+                return ModelicaInteractiveWhileStatementSyntax.new(source);
+
+            default:
+                return undefined;
+
+        }
+
+    }
+
+    override parse(): void {
+        this.#annotationClause = ModelicaAnnotationClauseSyntax.new(childForFieldName(this.source, "annotationClause"));
+        this.#descriptionString = ModelicaDescriptionStringSyntax.new(childForFieldName(this.source, "descriptionString"));
+    }
+
+}
+
+// DONE
+export class ModelicaInteractiveAssignmentStatementSyntax extends ModelicaStatementSyntax {
+
+    #sourceExpression?: ModelicaExpressionSyntax;
+    #targetExpression?: ModelicaExpressionSyntax;
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    override accept(visitor: ModelicaSyntaxVisitor, ...args: any[]): any {
+        return visitor.visitAssignmentStatement(this, ...args);
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.sourceExpression != null)
+                yield node.sourceExpression;
+
+            if (node.targetExpression != null)
+                yield node.targetExpression;
+
+        }();
+
+    }
+
+    override async execute(scope: ModelicaScope): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveAssignmentStatementSyntax | undefined {
+
+        if (source == null || source.type != "top_assignment_statement")
+            return undefined;
+
+        return new ModelicaInteractiveAssignmentStatementSyntax(source);
+
+    }
+
+    override parse(): void {
+
+        if (this.parsed == true)
+            return;
+
+        if (this.source == null || this.source.type != "top_assignment_statement")
+            throw new Error(`Expected assignment_statement, got ${this.source?.type}`);
+
+        super.parse();
+
+        this.#sourceExpression = ModelicaExpressionSyntax.new(childForFieldName(this.source, "sourceExpression"));
+        this.#targetExpression = ModelicaExpressionSyntax.new(childForFieldName(this.source, "targetExpression"));
+
+        this.parsed = true;
+
+    }
+
+    get sourceExpression(): ModelicaExpressionSyntax | undefined {
+        this.parse();
+        return this.#sourceExpression;
+    }
+
+    get targetExpression(): ModelicaExpressionSyntax | undefined {
+        this.parse();
+        return this.#targetExpression;
+    }
+
+}
+
+// DONE
+export class ModelicaInteractiveExpressionStatementSyntax extends ModelicaStatementSyntax {
+
+    #expression?: ModelicaExpressionSyntax;
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    override accept(visitor: ModelicaSyntaxVisitor, ...args: any[]): any {
+        return visitor.visitInteractiveExpressionStatement(this, ...args);
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.#expression != null)
+                yield node.#expression;
+
+        }();
+
+    }
+
+    override async execute(scope: ModelicaScope): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveExpressionStatementSyntax | undefined {
+
+        if (source == null || source.type != "expression")
+            return undefined;
+
+        return new ModelicaInteractiveExpressionStatementSyntax(source);
+
+    }
+
+    override parse(): void {
+
+        if (this.parsed == true)
+            return;
+
+        if (this.source == null || this.source.type != "expression")
+            throw new Error(`Expected expression, got ${this.source?.type}`);
+
+        super.parse();
+
+        this.#expression = ModelicaExpressionSyntax.new(childForFieldName(this.source, "expression"));
+
+        this.parsed = true;
+
+    }
+
+    get expression(): ModelicaExpressionSyntax | undefined {
+        this.parse();
+        return this.#expression;
+    }
+
+}
+
+
+// DONE
+export class ModelicaInteractiveWhileStatementSyntax extends ModelicaStatementSyntax {
+
+    #condition?: ModelicaExpressionSyntax;
+    #statements?: ModelicaStatementSyntax[];
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    override accept(visitor: ModelicaSyntaxVisitor, ...args: any[]): any {
+        return visitor.visitWhileStatement(this, ...args);
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.condition != null)
+                yield node.condition;
+
+            if (node.statements != null)
+                yield* node.statements;
+
+        }();
+
+    }
+
+    get condition(): ModelicaExpressionSyntax | undefined {
+        this.parse();
+        return this.#condition;
+    }
+
+    override async execute(scope: ModelicaScope): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveWhileStatementSyntax | undefined {
+
+        if (source == null || source.type != "while_statement")
+            return undefined;
+
+        return new ModelicaInteractiveWhileStatementSyntax(source);
+
+    }
+
+    override parse(): void {
+
+        if (this.parsed == true)
+            return;
+
+        if (this.source == null || this.source.type != "while_statement")
+            throw new Error(`Expected while_statement, got ${this.source?.type}`);
+
+        super.parse();
+
+        this.#condition = ModelicaExpressionSyntax.new(childForFieldName(this.source, "condition"));
+
+        this.#statements = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "statements"), "statement")) {
+
+            let statement = ModelicaStatementSyntax.new(child);
+
+            if (statement != null)
+                this.#statements.push(statement);
+
+        }
+
+        this.parsed = true;
+
+    }
+
+    get statements(): ModelicaStatementSyntax[] | undefined {
+        this.parse();
+        return this.#statements;
+    }
+
+}
+
+
+// DONE
+export class ModelicaInteractiveForStatementSyntax extends ModelicaStatementSyntax {
+
+    #indices?: ModelicaForIndexSyntax[];
+    #statements?: ModelicaStatementSyntax[];
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    override accept(visitor: ModelicaSyntaxVisitor, ...args: any[]): any {
+        return visitor.visitForStatement(this, ...args);
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.indices != null)
+                yield* node.indices;
+
+            if (node.statements != null)
+                yield* node.statements;
+
+        }();
+
+    }
+
+    override async execute(scope: ModelicaScope): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    get indices(): ModelicaForIndexSyntax[] | undefined {
+        this.parse();
+        return this.#indices;
+    }
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveForStatementSyntax | undefined {
+
+        if (source == null || source.type != "for_statement")
+            return undefined;
+
+        return new ModelicaInteractiveForStatementSyntax(source);
+
+    }
+
+    override parse(): void {
+
+        if (this.parsed == true)
+            return;
+
+        if (this.source == null || this.source.type != "for_statement")
+            throw new Error(`Expected for_statement, got ${this.source?.type}`);
+
+        super.parse();
+
+        this.#indices = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "indices"), "index")) {
+
+            let index = ModelicaForIndexSyntax.new(child);
+
+            if (index != null)
+                this.#indices.push(index);
+
+        }
+
+        this.#statements = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "statements"), "statement")) {
+
+            let statement = ModelicaStatementSyntax.new(child);
+
+            if (statement != null)
+                this.#statements.push(statement);
+
+        }
+
+        this.parsed = true;
+
+    }
+
+    get statements(): ModelicaStatementSyntax[] | undefined {
+        this.parse();
+        return this.#statements;
+    }
+
+}
+
+// DONE
+export class ModelicaInteractiveIfStatementSyntax extends ModelicaStatementSyntax {
+
+    #condition?: ModelicaExpressionSyntax;
+    #elseIfClauses?: ModelicaElseIfStatementClauseSyntax[];
+    #elseStatements?: ModelicaStatementSyntax[];
+    #thenStatements?: ModelicaStatementSyntax[];
+
+    constructor(source?: SyntaxNode | null) {
+        super(source);
+    }
+
+    override accept(visitor: ModelicaSyntaxVisitor, ...args: any[]): any {
+        return visitor.visitIfStatement(this, ...args);
+    }
+
+    override get children(): IterableIterator<ModelicaSyntaxNode> {
+
+        let node = this;
+        let superChildren = super.children;
+
+        return function* () {
+
+            yield* superChildren;
+
+            if (node.condition != null)
+                yield node.condition;
+
+            if (node.elseIfClauses != null)
+                yield* node.elseIfClauses;
+
+            if (node.elseStatements != null)
+                yield* node.elseStatements;
+
+            if (node.thenStatements != null)
+                yield* node.thenStatements;
+
+        }();
+
+    }
+
+    get condition(): ModelicaExpressionSyntax | undefined {
+        this.parse();
+        return this.#condition;
+    }
+
+    get elseIfClauses(): ModelicaElseIfStatementClauseSyntax[] | undefined {
+        this.parse();
+        return this.#elseIfClauses;
+    }
+
+    get elseStatements(): ModelicaStatementSyntax[] | undefined {
+        this.parse();
+        return this.#elseStatements;
+    }
+
+    override async execute(scope: ModelicaScope): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    static override new(source?: SyntaxNode | null): ModelicaInteractiveIfStatementSyntax | undefined {
+
+        if (source == null || source.type != "if_statement")
+            return undefined;
+
+        return new ModelicaInteractiveIfStatementSyntax(source);
+
+    }
+
+    override parse(): void {
+
+        if (this.parsed == true)
+            return;
+
+        if (this.source == null || this.source.type != "if_statement")
+            throw new Error(`Expected if_statement, got ${this.source?.type}`);
+
+        super.parse();
+
+        this.#condition = ModelicaExpressionSyntax.new(childForFieldName(this.source, "condition"));
+
+        this.#elseIfClauses = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "elseIfClauses"), "elseIfClause")) {
+
+            let elseIfClause = ModelicaElseIfStatementClauseSyntax.new(child);
+
+            if (elseIfClause != null)
+                this.#elseIfClauses.push(elseIfClause);
+
+        }
+
+        this.#elseStatements = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "elseStatements"), "elseStatement")) {
+
+            let elseStatement = ModelicaStatementSyntax.new(child);
+
+            if (elseStatement != null)
+                this.#elseStatements.push(elseStatement);
+
+        }
+
+        this.#thenStatements = [];
+
+        for (let child of childrenForFieldName(childForFieldName(this.source, "thenStatements"), "thenStatement")) {
+
+            let thenStatement = ModelicaStatementSyntax.new(child);
+
+            if (thenStatement != null)
+                this.#thenStatements.push(thenStatement);
+
+        }
+
+        this.parsed = true;
+
+    }
+
+    get thenStatements(): ModelicaStatementSyntax[] | undefined {
+        this.parse();
+        return this.#thenStatements;
+    }
+
 }
