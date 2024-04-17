@@ -69,10 +69,10 @@ export interface SyntaxNode {
     text: string;
     tree: Tree;
     type: string;
+    hasChanges: boolean;
+    hasError: boolean;
+    isMissing: boolean;
 
-    hasChanges(): boolean;
-    hasError(): boolean;
-    isMissing(): boolean;
     toString(): string;
     walk(): TreeCursor;
 
@@ -89,7 +89,7 @@ export interface Tree {
 }
 
 export interface TreeCursor {
-    
+
     nodeType: string;
     nodeText: string;
     nodeIsNamed: boolean;
@@ -119,7 +119,7 @@ export function currentFieldName(cursor: TreeCursor): string {
 }
 
 export function currentNode(cursor: TreeCursor): SyntaxNode {
-    
+
     let currentNode = (<any>cursor).currentNode;
 
     if (typeof currentNode === "function")
